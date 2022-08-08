@@ -1,0 +1,91 @@
+ACTIVATE_DRONE
+
+COMMENT to turn the heading to left or right for 1 degree END_COMMENT
+COMMENT to move the drone so that it climbs up or drops down with a speed of 0.1 m/s. END_COMMENT
+COMMENT to move the drone so that it moves in the heading direction forward or backward with a speed of 1 m/s. END_COMMENT
+
+
+COMMENT This program sprays a rectangular shaped field of 5m x 3m, given that drone starts at the corner of field END_COMMENT
+COMMENT The drone is initially at the bottom left corner of the rectangle facing east END_COMMENT
+
+
+COMMENT Get the desired side information for the field  END_COMMENT
+INT side1_I;
+INT side2_I;
+
+
+INPUT(side1_I);
+INPUT(side2_I);
+
+
+COMMENT Check the initial status and start by connecting the drone to wifi END_COMMENT
+BOOLEAN IsConnected_B <- GET_WIFI_CONNECTION_STATUS();
+
+IF(NOT(IsConnected_B)){
+	STRING password_S <- "MyPassword35467";
+	STRING wifiAddress_S <- "ZX-Yel-536363736363";
+	IsConnected_B <- CONNECT_DRONE_TO_WIFI(password_S, wifiAddress_S);
+	
+	COMMENT Check whether the connection is successful or not END_COMMENT
+	IF(IsConnected_B){
+		PRINT("CONNECTION SUCCESSFUL");
+	}
+
+	ELSE{
+		PRINT("WRONG CREDENTIALS!");
+    }
+}
+
+COMMENT Bring and print the initial information about the drone END_COMMENT
+READ_HEADING();
+READ_ALTITUDE();
+READ_TEMPERATURE();
+PRINT(GET_VERTICAL_VELOCITY());
+PRINT(GET_HORIZONTAL_VELOCITY());
+
+COMMENT Set the initial altitude of the drone as 4 meters END_COMMENT
+CLIMB_UP(0.1);
+
+COMMENT Turn the spray on to start END_COMMENT
+BOOLEAN isSprayTurnedOn_B <- GET_SPRAY_STATUS();
+IF(NOT(isSprayTurnedOn_B)){
+	TURN_ON_SPRAY();
+}
+
+CONSTANT_FLOAT horizontalSpeed_F <- 1.0;
+INT i_I <- 0;
+INT j_I <- 0;
+COMMENT We assume that the drone is at the bottom left corner of the rectangle looking to right side at the initial point END_COMMENT
+BOOLEAN facingRight_B <- TRUE;
+
+
+COMMENT The drone starts to spray the field according to given side specifications END_COMMENT
+WHILE( (i_I < side2_I) ){
+	WHILE( j_I < side1_I ){
+		COMMENT A END_COMMENT
+		MOVE_FORWARD(horizontalSpeed_F);
+		j_I++;
+	}
+	COMMENT When the drone comes to the end of the line, it changes its facing and proceeds in the opposite way END_COMMENT
+	IF(facingRight_B){
+		TURN_LEFT(1);
+		MOVE_FORWARD(horizontalSpeed_F);
+    		TURN_LEFT(1);
+        }
+	ELSE{
+		TURN_RIGHT(1);
+		MOVE_FORWARD(horizontalSpeed_F);
+    		TURN_RIGHT(1);
+	}
+        facingRight_B <- NOT(facingRight_B);
+	i_I++;
+
+}
+
+COMMENT Stop the drone and turn the spray off END_COMMENT
+STOP_HORIZONTALLY();
+STOP_VERTICALLY(); 
+TURN_OFF_SPRAY();
+DISCONNECT_DRONE_FROM_WIFI();
+
+STOP_DRONE

@@ -1,0 +1,155 @@
+ACTIVATE_DRONE
+	COMMENT ////////////////// Main program ////////////////// END_COMMENT
+	COMMENT Test area is a equilateral triangle. Length of its one side is given as a integer variable as meters. END_COMMENT
+	CONSTANT_FLOAT triangleSide_F <- 10.0;
+	
+	BOOLEAN readyToWork_B <- FALSE;
+	
+	COMMENT Connecting the drone to the wifi END_COMMENT
+	STRING wifiName_S <- "fastestWifiInTheWorld";
+	STRING wifiPassword_S <- "mostSecretPassword";
+
+	BOOLEAN isConnected_B <- GET_WIFI_CONNECTION_STATUS();
+	IF (NOT(isConnected_B)) {
+		CONNECT_DRONE_TO_WIFI(wifiName_S, wifiPassword_S);
+	}
+
+	PRINT("Connection status: ");
+	READ_WIFI_CONNECTION_STATUS();
+	PRINT("\n");
+	PRINT("Connection info: ");
+	READ_WIFI_CONNECTION_INFORMATION();
+	PRINTLINE();
+	
+	COMMENT Check if the drone is ready to start working END_COMMENT
+	BOOLEAN isReady_B <- isReady();
+	
+	IF (isReady_B) {
+		PRINTLINE("Drone is in ideal conditions. Checking movement...");
+		COMMENT Check the movement of the drone END_COMMENT
+		dance();
+		
+		WHILE ( readyToWork_B == FALSE ) {
+			PRINTLINE("Did the drone move and return to initial position? Write TRUE or FALSE.");
+			BOOLEAN didMove_B <- FALSE;
+			INPUT(didMove_B);
+
+			IF (didMove_B) {
+				readyToWork_B <- TRUE;
+			}
+			ELSE {
+				PRINT("Movement failed. Running the test again.");
+				dance();
+			}
+		}
+	}
+	PRINTLINE("Movement test successful.");
+	PRINTLINE("Turning north and opening spray.");
+
+	COMMENT Now its time to spray this triangle. END_COMMENT
+	COMMENT We assume that the drone starts its movement at the lower left corner and faces north END_COMMENT
+	FLOAT triangleSideTemp_F <- triangleSide_F;
+	TURN_NORTH();
+
+	COMMENT Starting the spray, drone starts its trajectory. END_COMMENT
+	TURN_ON_SPRAY();
+	
+	PRINTLINE("Drone now starts its trajectory.");
+	WHILE (triangleSideTemp_F NOT= 0.0) {
+		COMMENT Moving right. END_COMMENT
+		TURN_EAST();
+		MOVE_FORWARD(triangleSideTemp_F);
+
+		COMMENT Turning and moving to reach the upper edge. END_COMMENT
+		TURN_LEFT(120);
+		MOVE_FORWARD(triangleSideTemp_F);
+
+		COMMENT Turning and moving to reach the lower left edge. END_COMMENT
+		COMMENT But this time we need to decrement the lenght by one. END_COMMENT
+		triangleSideTemp_F--;
+		TURN_LEFT(120);
+		MOVE_FORWARD(triangleSideTemp_F);
+	}
+	
+	PRINTLINE("Turning off the spray.");
+	TURN_OFF_SPRAY();
+
+	COMMENT Drone is now at the center of the square. Moving left to leave the area. END_COMMENT
+	PRINTLINE("Leaving the area.");
+	FLOAT halfSide_F <- triangleSide_F / 2.0; 
+	TURN_WEST();
+	MOVE_FORWARD(halfSide_F);
+
+	COMMENT Dropping down and disconnecting. END_COMMENT
+	PRINTLINE("Touching the ground and disconnecting.");
+	DROP_DOWN(2.0);
+	DISCONNECT_DRONE_FROM_WIFI();
+
+	COMMENT ////////////////// Functions ///////////////////// END_COMMENT
+	BOOLEAN FUNCTION isReady() {
+		BOOLEAN check_B <- FALSE;
+		
+		INT heading_I <- GET_HEADING();
+		FLOAT altitude_F <- GET_ALTITUDE();
+		BOOLEAN spray_B <- GET_SPRAY_STATUS();
+		FLOAT temp_F <- GET_TEMPERATURE();
+		
+		IF ( heading_I NOT= 0) {
+			check_B <- FALSE;
+		}
+		ELSE_IF ( altitude_I NOT= 0 ) {
+			check_B <- FALSE;
+		}
+		ELSE_IF (spray_B == TRUE) {
+			check_B <- FALSE;
+		}
+		ELSE_IF ( temp_F < 0.0 OR temp_F > 50.0) {
+			check_B <- FALSE;
+		}
+		ELSE {
+			check_B <- TRUE;
+		}
+
+		RETURN check_B;
+	}
+
+	VOID FUNCTION dance() {
+		CLIMB_UP(3.0);
+
+		COMMENT Reset the heading to north END_COMMENT
+		TURN_NORTH();
+
+		COMMENT Turn around a little to check END_COMMENT
+		TURN_LEFT(90);
+		TURN_RIGHT(90);
+		TURN_NORTH();
+		TURN_EAST();
+		TURN_WEST();
+		TURN_SOUTH();
+		TURN_NORTH_EAST();
+		TURN_NORTH_WEST();
+		TURN_SOUTH_EAST();
+		TURN_SOUTH_WEST();
+
+		COMMENT Reset the heading to north END_COMMENT
+		TURN_NORTH();
+
+		COMMENT Check vertical movement END_COMMENT
+		CLIMB_UP(1.0);
+		DROP_DOWN(2.0);
+		MOVE_FORWARD(1.0);
+		MOVE_BACKWARD(1.0);
+		MOVE(SOUTH, 1.0);
+		MOVE(NORTH, 1.0);
+		MOVE(WEST, 1.0);
+		MOVE(EAST, 1.0);
+		MOVE(NORTH_EAST, 1.0);
+		MOVE(SOUTH_WEST, 1.0);
+		MOVE(NORTH_WEST, 1.0);
+		MOVE(SOUTH_EAST, 1.0);
+
+		COMMENT Reset the heading to north END_COMMENT
+		TURN_NORTH();
+	}
+		
+STOP_DRONE 

@@ -1,0 +1,116 @@
+ACTIVATE_DRONE
+
+	COMMENT Declaring some random variables and constants END_COMMENT 
+	BOOLEAN decision_B <- FALSE;
+	INT testINT_I <- 5;
+	CONSTANT_INT constInt_I <- 32;
+	FLOAT testFloat_F <- 4.3;
+	CONSTANT_FLOAT constFloat_F <- 3.1;
+	STRING testString_S <- "Welcome to Hudson!";
+	CONSTANT_STRING constString_S <- "Hello World!";
+
+	PRINTLINE("CHECKING THE PROGRAMMING LANGUAGE");
+
+	COMMENT Expected output: Welcome to Hudson! Hello World! Hey! END_COMMENT
+
+	PRINT(testString_S);
+	PRINT(" ");
+	PRINTLINE(constString_S);
+	PRINT("Hey!");
+
+	PRINTLINE("Does the above output is same as:");
+	PRINTLINE("Welcome to Hudson! Hello World!");
+	PRINTLINE("Hey!");
+	PRINTLINE("CAUTION: Accept only IF the output checks with expected string!");
+	PRINTLINE("1 to accept, 0 to decline");
+	
+	INPUT(testInt_I);
+	WHILE (testInt_I NOT= 1) {
+		PRINTLINE("Access declined.");
+		INPUT(testInt_I);
+	}
+	PRINTLINE("Access granted.");
+	
+	COMMENT Activating the drone END_COMMENT
+	PRINTLINE("ACTIVATING DRONE");
+	CONNECT_DRONE_TO_WIFI("Super cool network name", "password of this super cool network");
+
+	PRINTLINE("Checking diagnostics of the drone:");
+	PRINT("WIFI connection status: ");
+	READ_WIFI_CONNECTION_STATUS();
+	PRINTLINE();
+
+	PRINT("WIFI connection information: ");
+	READ_WIFI_CONNECTION_INFORMATION();
+	PRINTLINE();
+
+	PRINT("Heading: ");
+	READ_HEADING();
+	PRINTLINE();
+
+	PRINT("Altitude: ");
+	READ_ALTITUDE();
+	PRINTLINE();
+
+	PRINT("Spray status: ");
+	READ_SPRAY_STATUS();
+	PRINTLINE();
+
+	PRINT("Temperature: ");
+	READ_TEMPERATURE();
+	PRINTLINE();
+	
+	COMMENT Functions END_COMMENT
+	
+	VOID FUNCTION takeOff() {
+		FLOAT altitude_F <- GET_ALTITUDE();
+		INT heading_I <- GET_HEADING();
+		BOOLEAN spray_B <- GET_SPRAY_STATUS();
+		FLOAT horizontalV_F <- GET_HORIZONTAL_VELOCITY();
+		FLOAT verticalV_F <- GET_VERTICAL_VELOCITY();
+		
+		IF ((altitude_F == 0.0) AND (heading_I == 0) AND (spray_B NOT= TRUE) AND (horizontalV_F == 0.0) AND (verticalV_F == 0.0) )
+		{
+			CLIMB_UP(7.0);
+			TURN_LEFT(180);
+			TURN_RIGHT(180);
+			MOVE_FORWARD(1.0);
+			MOVE_BACKWARD(1.0);
+			DROP_DOWN(2.0);
+		}
+		ELSE 
+		{
+			PRINTLINE("The drone is not eligable for taking off.");
+		}
+	}
+	
+	VOID FUNCTION stopMovement() {
+		STOP_VERTICALLY();
+		STOP_HORIZONTALLY();
+	}
+	
+	COMMENT Above functions does random movements and returns the heading value. It's parameter gets the number of times for movement sequence. END_COMMENT
+	
+	INT FUNCTION dance(INT count_I) {
+		FOR( INT loop_I <- 1; loop_I <= count_I; loop_I++ ) {
+			TURN_NORTH();
+			TURN_EAST();
+			TURN_WEST();
+			TURN_SOUTH();
+			TURN_NORTH_EAST();
+			TURN_NORTH_WEST();
+			TURN_SOUTH_EAST();
+			TURN_SOUTH_WEST();
+		}
+		
+		INT heading_I <- GET_HEADING();
+		RETURN heading_I;
+	}
+
+	takeOff();
+	stopMovement();
+	dance();
+	
+	DISCONNECT_DRONE_FROM_WIFI();
+
+STOP_DRONE

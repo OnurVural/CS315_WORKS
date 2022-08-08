@@ -1,0 +1,253 @@
+<!DOCTYPE HTML>
+<html>
+
+<body>
+  <h2>Hello World from JavaScript</h2>
+  <h>1.How are the boolean values represented?</h>
+  <br>
+  <script>
+    document.writeln('***  falsy values: Boolean(false):' + Boolean(false) + ", " );
+    document.writeln('Boolean(0):' + Boolean(0) + ", " );
+    document.writeln('Boolean(-0):' + Boolean(-0) + ", " );
+    document.writeln('Boolean(""):' + Boolean("") + ", " );
+    document.writeln('Boolean(null):' + Boolean(null) + ", " );
+    document.writeln('Boolean(NaN):' + Boolean(NaN) + ", " );
+    document.writeln('Boolean(7 <= 2):' + Boolean(7 <= 2) + ", " );
+
+    document.writeln('*** truthy values: Boolean(true):' + Boolean(true) + ", " );
+    document.writeln('Boolean(-3):' + Boolean(-3) + ", " );
+    document.writeln('Boolean("anyStr"):' + Boolean("anyStr") + ", " );
+    document.writeln('Boolean(7 >= 2):' + Boolean(7 >= 2) + ", " );
+
+  </script>
+  <br>
+
+
+  <h> 2.What operators are short-circuited? </h>
+  <br>
+  <h> Short circuit operators are &&, ||, ?? </h>
+  <br>
+   <script>
+
+  </script>
+  <br>
+
+
+
+
+  <h>3.How are the results of short-circuited operators computed? (Consider also function calls) </h>
+  <br>
+  <h>*truthyVal = abc, falsyVal = 0 </h>
+  <br>
+  <h>---x && y: if x is truthyVal than y, else x</h>
+  <br>
+  <script>
+
+    function falsyValReturner() {
+    	document.writeln("entered falsyValReturner");
+        return false;
+    }
+
+
+
+   function truthyValReturner() {
+   		document.writeln("entered truthyValReturner");
+        return 1;
+   }
+
+   var truthyVal = "abc";
+   var falsyVal = 0;
+
+	document.writeln("EXAMPLE-> falsyVal && truthyValReturner() WILL have short circuiting, NOT enter	 		function, return value of falsyVal as:");
+	document.writeln(falsyVal && truthyValReturner()) ;
+
+
+    //document.writeln("EXAMPLE-> truthyVal && falsyValReturner() WILL NOT have short circuiting, WILL 		enter to function and retrun value of it as:")
+	//document.writeln( truthyVal && falsyValReturner() );
+
+  </script>
+  <br>
+  <script>
+
+    document.writeln("EXAMPLE-> truthyVal && falsyValReturner() WILL NOT have short circuiting, WILL 		enter to function and retrun value of it as:")
+	document.writeln( truthyVal && falsyValReturner() );
+
+  </script>
+  <br>
+   <h>---x || y: if x is falsyVal than y, else x </h>
+  <br>
+  <script>
+  		document.writeln("EXAMPLE-> truthyVal || falsyValReturner() WILL have short circuiting,   			WILL NOT enter to function, DIRECTLY return value of truthyVal as:")
+		document.writeln(truthyVal || falsyValReturner() );
+
+  </script>
+  <br>
+  <script>
+  	document.writeln("EXAMPLE-> falsyVal || truthyValReturner() WILL NOT have short circuiting, 		therefore WILL enter to function as:");
+    document.writeln(falsyVal || truthyValReturner());
+
+  </script>
+  <br>
+  <h>---val ?? defaultVal() : if val not NULL return val else defaultVal() </h>
+  <br>
+  <script>
+
+
+    function defaultVal() {
+       document.writeln("I entered to the function defaultVal() to return:");
+       return "functVal";
+    }
+
+    var val;
+  	document.writeln(" EXAMPLE-> val == null: NO S.C:" );
+    var myVal = val ?? defaultVal();
+    document.writeln(myVal);
+
+    document.writeln(" /EXAMPLE-> val != null: S.C:" );
+    val = "aStr";
+    myVal = val ?? defaultVal();
+    document.writeln(myVal);
+    </script>
+  <br>
+  <br>
+
+  <h>4.What are the advantages about short-circuit evaluation? </h>
+  <br>
+  <h>*short-circuit evaluation helps to efficiently go through decision statements, thus reducing the precious time loss </h>
+  <br>
+  <h>by the help of short circuit evaluation, the second operand will only be evaluated when its necessary! </h>
+  <br>
+  <h>EXAMPLE-> in expression haveEnoughMoney = haveEnoughMoneyInCard || checkYourPurse(10000), no need to call checkYourPurse() if haveEnoughMoneyInCard has truthy value!!! </h>
+  <br>
+
+
+  <h>EXAMPLE-> in expression (haveEnoughMoney && productIsAvailableInShelf(SMART_TV_LG_445677))
+    if haveEnoughMoney is false there is no need to evaluate productIsAvailableInShelf() thanks to short circuit evaluation</h>
+    <br>
+  <script>
+
+    function checkYourPurse(amount){
+  		document.writeln("checking for money in the purse.................."  );
+  		if (amount > 1000){
+    		return false;
+  		}
+  		else{
+    		return true;
+  			}
+	}
+
+
+
+    function productIsAvailableInShelf(key){
+  		var tvShelf = ["SMART_TV_SM_447", "SMART_TV_V_445", "SMART_TV_LG_457",    			      			"SMART_TV_LG_445677"];
+
+   		 document.writeln("checking shelf item...");
+         if(key == "SMART_TV_LG_445677"){
+      			document.writeln("found item!..");
+      			return true;
+    		}
+  		return false;
+	}
+
+    function checkBuying(haveEnoughMoney, item){
+
+  		if( haveEnoughMoney && productIsAvailableInShelf(item) ){
+      		document.writeln("I bought the product!!! :)");
+  		}
+ 	 	else{
+        	document.writeln("I didn't buy the product :(");
+   		 }
+	}
+
+    var haveEnoughMoneyInCard = true;
+    var haveEnoughMoney = haveEnoughMoneyInCard || checkYourPurse(10000);
+
+    document.writeln("EXAMPLE-> in expression (haveEnoughMoney && 	productIsAvailableInShelf(SMART_TV_LG_445677))");
+    document.writeln("if haveEnoughMoney is false there is no need to evaluate productIsAvailableInShelf() thanks to short circuit evaluation: ");
+    haveEnoughMoney = false;
+
+    checkBuying(haveEnoughMoney, "SMART_TV_LG_445677");
+    document.writeln("When haveEnoughMoney is true:");
+    haveEnoughMoney = true;
+    checkBuying(haveEnoughMoney, "SMART_TV_LG_445677");
+ </script>
+  <br>
+   <h>** short-circuit evaluation helps to eliminate run-time problems such as divide by zero </h>
+   <script>
+
+   document.writeln("EXAMPLE-> in (dangerousNumber != 0) && (1000/dangerousNumber > 100) ");
+   document.writeln("(dangerousNumber != 0) may prevent evaluation of 1000/dangerousNumber thanks to short   circuit evaluation!");
+
+
+   var dangerousNumber = 0;
+
+    if ((dangerousNumber != 0) && (1000/dangerousNumber > 100)){
+        document.writeln("PROCESSING...");
+    }
+    else{
+        document.writeln("PREVENTED: CANNOT DIVIDE BY 0" );
+    }
+   </script>
+  <br>
+
+
+  <h>5.What are the potential problems about short-circuit evaluation?</h>
+  <br>
+  <br>
+  <script>
+    function checkStorageAvailability(allocationSize){
+      if(allocationSize < 1000){
+         document.writeln("NO PROBLEM");
+         return true;
+      }
+      else{
+        document.writeln("NOTIFYING SYSTEM ADMIN ABOUT STORAGE PROBLEM....");
+        // PROCESSING
+        // notifyAdmin("msg: extension required for storage");
+        return false;
+      }
+    }
+
+    function checkResourceAvailability(resourceAmount){
+      if(resourceAmount < 1000){
+         document.writeln("NO PROBLEM");
+         return true;
+      }
+      else{
+        document.writeln("NOTIFYING SYSTEM ADMIN ABOUT RESOURCE PROBLEM....");
+        // PROCESSING
+        // notifyAdmin("msg: extension required for resources!!!");
+        return false;
+      }
+    }
+
+
+
+
+
+
+
+    document.writeln("EXAMPLE-> in expression if ( checkStorageAvailability(1500) && checkResourceAvailability(1500))");
+    document.writeln("Both functions need to notify admin but short-circuit prevents checkResourceAvailability(1500) is never evaluated:" );
+    if ( checkStorageAvailability(1500) && checkResourceAvailability(1500)){
+      document.writeln("System works properly");
+    }
+    else{
+      document.writeln("System isn't working properly");
+    }
+    //document.writeln("** Efficency may decrease as well due to compiler to check for short-circuits which may result in additional cycles and time loss");
+  </script>
+  <br>
+  <br>
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

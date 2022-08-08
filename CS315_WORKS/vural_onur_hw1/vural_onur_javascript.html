@@ -1,0 +1,182 @@
+<!DOCTYPE HTML>
+<html>
+
+<body>
+  <h2>Hello World from JavaScript</h2>
+  <h>1- What types are legal for subscripts?</h>
+  <br>
+  <script>
+    document.writeln("*My list is: ");
+    var myList = [0,1,2,3,4,5];
+    for (i = 0; i < myList.length; i++)
+    	document.writeln(myList[i] + ", ");
+
+    document.writeln("  **Legal subscript usage is [integerNumber] ***myList[2] gives: 		     ");
+    document.writeln(myList[2]);
+  </script>
+  <br>
+  <br>
+
+
+  <h>2- Are subscripting expressions in element references range checked? </h>
+  <br>
+   <script>
+    document.writeln("*Checked, no index-out-of-bound exception **myList[7] returns: "     );
+    document.writeln(myList[7]);
+    myList[7] = 7;
+
+    document.writeln("***If index out bound is assigned array expands-> after (myList[7] = 7), myList[7] 		returns: "     );
+    document.writeln(myList[7]);
+  </script>
+  <br>
+  <br>
+
+
+
+  <h>3- When are subscript ranges bound? </h>
+  <br>
+  <h>*Subscript ranges are bound at run-time/ dynamically bound in heap </h>
+  <br>
+  <h>EXAMPLE-> For myList, subscript ranges are bound once again, at run-time, in reallocation </h>
+  <br>
+  <script>
+  	document.writeln("--->My list is: ");
+  	for (i = 0; i < myList.length; i++)
+    	document.writeln(myList[i] + ", ");
+    myList = [7, 2, 1, 1, 4];
+    document.writeln("--->After realloc, my list is: ");
+    for (i = 0; i < myList.length; i++)
+    	document.writeln(myList[i] + ", ");
+  </script>
+  <br>
+  <br>
+
+
+  <h>4- When does allocation take place? </h>
+  <br>
+  <h>*Allocation takes place at run-time, in heap </h>
+  <br>
+  <h>EXAMPLE-> Same array, myList can be reallocated (see under 3 again) </h>
+  <br>
+  <br>
+  <h>EXAMPLE-> Trying to reach an array before its creation returns undefined at RUN-TIME </h>
+  <br>
+  <script>
+    document.writeln("document.writeln(myProblematicList) returns: " );
+    document.writeln(myProblematicList); // undefined
+    var myProblematicList = [1,2,3];
+  </script>
+  <br>
+  <br>
+
+
+
+
+  <h>5- Are ragged or rectangular multidimensional arrays allowed, or both? </h>
+  <br>
+  <h>*Both are allowed! </h>
+  <br>
+  <h>**var rectArray = [[1,2,3],[4,5,6],[7,8,9]] </h>
+  <br>
+  <h>***var raggedArray = [[1,2,3],[4,5],[6,7,8,9]];</h>
+  <br>
+  <script>
+    document.writeln("EXAMPLE-> Rectangular array is: ");
+    var rectArray = [[1,2,3],[4,5,6],[7,8,9]];
+    document.writeln(rectArray);
+
+    document.writeln("EXAMPLE-> Ragged array is: ")
+    var raggedArray = [[1,2,3],[4,5],[6,7,8,9]];
+    document.writeln(raggedArray);
+  </script>
+  <br>
+  <br>
+
+  <h>6- Can array objects be initialized? </h>
+  <br>
+  <script>
+  	document.writeln("Array objects can be initialized as following: ");
+	myList = [2,4,6,8,10];
+	document.writeln("myList = [...]");
+  </script>
+  <br>
+  <br>
+
+  <h>7- Are any kind of slices supported? </h>
+  <br>
+  <h>*Slices are possible with ".slice(start, end-excluded)" </h>
+  <br>
+  <h>EXAMPLE-> slice of myList demonstration is as follows... </h>
+  <script>
+  	document.writeln("--->myList is: " );
+    document.writeln(myList);
+    document.writeln("--->myList.slice(1,3) is: " );
+    document.writeln(myList.slice(1,3));
+  </script>
+  <br>
+  <br>
+
+
+  <h>8- Which operators are provided? </h>
+  <br>
+  <h>[], =, ==, !=, ===, [...arr] (check console log for demonsration)</h>
+  <br>
+  <script>
+    console.log("[] retrieves the item ---> myList[2] is: ");
+    console.log(myList[2]);
+  </script>
+  <script>
+    console.log("= is assignment operator ---> after myList[2] = 22:  ");
+    myList[2] = 22;
+    console.log(myList[2]);
+  </script>
+  <script>
+    var arr1 = [1,2,3];
+    var arr1other =  [1,2,3];
+    var arr2 = [2,4,6];
+    console.log("== is equality check op");
+    console.log("arr1 is: ");
+    console.log(arr1);
+    console.log("arr2 is: ");
+    console.log(arr2);
+    console.log("arr1 == arr2 is: ");
+    console.log(arr1 == arr2);
+  </script>
+  <br>
+  <script>
+    console.log("!= is NOT equality check op ");
+    console.log("arr1 != arr2 is: ");
+    console.log(arr1 != arr2);
+  </script>
+  <br>
+  <br>
+  <script>
+    console.log("=== is identity check ");
+    console.log("arr1 is: ");
+    console.log(arr1);
+    console.log("arr1other is: ");
+    console.log(arr1other);
+    console.log("arr1 === arr1other is: ");
+    console.log(arr1 === arr1other);
+    console.log("arr1 === arr1 is: ");
+    console.log(arr1 === arr1);
+  </script>
+  <br>
+  <script>
+    console.log("[...] is spred operator to clone arrays or even merge them ");
+
+    const arr1Clone = [...arr1];
+    console.log("after ---> arr1Clone = [...arr1], arr1Clone is:");
+    console.log(arr1Clone);
+    const arr12Merged = [...arr1, ...arr2];
+    console.log("after ---> arr12Merged = [...arr1, ...arr2], arr12Merged is:");
+    console.log(arr12Merged);
+  </script>
+  <br>
+  <br>
+
+
+
+</body>
+
+</html>

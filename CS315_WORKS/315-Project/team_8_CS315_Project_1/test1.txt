@@ -1,0 +1,46 @@
+ACTIVATE_DRONE
+
+CONNECT_DRONE_TO_WIFI( "super wifi 1234", "password of super wifi" );
+
+CONSTANT_INT firstNumber <- 10;
+CONSTANT_INT secondNumber <- 35;
+CONSTANT_INT thirdNumber <- 50;
+
+
+TURN_LEFT(firstNumber + secondNumber * thirdNumber);
+
+FLOAT floatForwardNumber <- 3.14;
+
+WHILE( floatForwardNumber <= 100 )
+{
+    MOVE_FORWARD(floatForwardNumber);
+
+    floatForwardNumber++;
+}
+
+TURN_ON_SPRAY();
+TURN_NORTH_EAST();
+
+FOR(INT index <- 0; index < 25; index <- index * 2)
+{
+    MOVE_BACKWARD( floatForwardNumber);
+}
+
+BOOLEAN stopDecision <- FALSE;
+
+INT FUNCTION stopEverything( BOOLEAN decision)
+{
+    STOP_HORIZONTALLY();
+    STOP_VERTICALLY();
+}
+
+stopEverything( stopDecision AND (14 <= 61));
+
+TURN_OFF_SPRAY();
+
+PRINT(READ_ALTITUDE());
+PRINTLINE(READ_WIFI_CONNECTION_INFORMATION());
+
+DISCONNECT_DRONE_FROM_WIFI
+
+STOP_DRONE

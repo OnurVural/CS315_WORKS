@@ -1,0 +1,96 @@
+ACTIVATE_DRONE
+
+COMMENT Check the initial status and start by connecting the drone to wifi END_COMMENT
+READ_WIFI_CONNECTION_STATUS();
+READ_WIFI_CONNECTION_INFORMATION();
+CONNECT_DRONE_TO_WIFI();
+
+FLOAT altitude <- 0.1;
+FLOAT move <- 1.0;
+
+CLIMP_UP(altitude);
+CLIMP_UP(0.1);
+
+DROP_DOWN(altitude);
+DROP_DOWN(0.1);
+
+STOP_VERTICALLY();
+
+MOVE_FORWARD(move);
+MOVE_FORWARD(1.0);
+
+MOVE_BACKWARD(move);
+MOVE_BACKWARD(1.0);
+
+TURN_LEFT(move);
+TURN_LEFT(20);
+
+TURN_RIGHT(30);
+
+TURN_NORTH_EAST();
+
+TURN_NORTH_WEST();                     
+TURN_SOUTH_EAST();                     
+TURN_SOUTH_WEST(); 
+                   
+TURN_ON_SPRAY();                     
+TURN_OFF_SPRAY();
+
+VOID FUNCTION turnNorthEast(INT north, INT east){
+	TURN_NORTH(north);
+	TURN_EAST(east);
+}
+
+VOID FUNCTION arrangeVelocity(INT velocityFactor){
+	FLOAT xComponent <- GET_HORIZONTAL_VELOCITY();
+	FLOAT newVelocity <- xComponent * velocityFactor;
+	MOVE_FORWARD(newVelocity);	
+}
+
+turnNorthEast(20, 30);
+arrangeVelocity(3);
+
+CONSTANT_INT heightFactor <- 10;
+
+COMMENT Arrange the altitude first! END_COMMENT
+FOR(INT i <- 0; i < moveFactor; i++)
+{
+    CLIMP_UP(1.0);
+}
+
+INT moveFactor <- 0;
+BOOLEAN stopFlag <- FALSE;
+BOOLEAN turnFlag <- FALSE;
+
+COMMENT Control the drone and begin spraying as it moves forward! END_COMMENT
+TURN_ON_SPRAY();
+
+WHILE( (moveFactor <= 10) AND NOT(stopFlag))
+{
+    MOVE_FORWARD(moveFactor);
+    
+    IF(turnFlag){
+	TURN_EAST(1);
+    }
+    ELSE{
+        TURN_WEST(1);
+    }
+    moveFactor++;
+    turnFlag <- NOT turnFlag;
+   
+    IF(moveFactor == 10){
+	stopFlag <- TRUE;
+    }	
+}
+
+READ_WIFI_CONNECTION_STATUS();
+DISCONNECT_DRONE_FROM_WIFI();
+
+COMMENT Stop the drone and turn the spray off END_COMMENT
+IF(stopFlag){
+   STOP_HORIZONTALLY();
+   STOP_VERTICALLY(); 
+   TURN_OFF_SPRAY();
+}
+
+STOP_DRONE
